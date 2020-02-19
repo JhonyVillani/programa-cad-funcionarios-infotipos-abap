@@ -2,45 +2,24 @@ FUNCTION zabaptrf01_jm.
 *"----------------------------------------------------------------------
 *"*"Interface local:
 *"  IMPORTING
-*"     REFERENCE(IV_DATANASC) TYPE  DATUM
+*"     REFERENCE(IV_DATA_NASC) TYPE  P0002-GBDAT
 *"  EXPORTING
-*"     REFERENCE(EV_IDADE) TYPE  ZABAPTRDE19_MC
+*"     REFERENCE(EV_IDADE) TYPE  I
 *"----------------------------------------------------------------------
 
-  DATA:   lv_diaatual  TYPE char2,
-          lv_dianasc   TYPE char2,
-          lv_mesatual  TYPE char2,
-          lv_mesnasc   TYPE char2,
-          lv_anoatual  TYPE i,
-          lv_anonasc   TYPE i.
+ev_idade(4) = sy-datum(4) - iv_data_nasc(4).
+    IF iv_data_nasc+4(2) < sy-datum+4(2).
 
-  lv_anoatual = sy-datum(4).                                "20200201
-  lv_anonasc  = iv_data_nasc(4).                            "19950814
+        ev_idade = ev_idade - 1 .
 
-  lv_mesatual = sy-datum+4(2). "02
-  lv_mesnasc  = iv_data_nasc+4(2). "08
+      elseif iv_data_nasc+4(2) = sy-datum+4(2).
 
-  lv_diaatual = sy-datum+6(2). "01
-  lv_dianasc  = iv_data_nasc+6(2). "14
+        IF iv_data_nasc+6(2) > sy-datum+6(2).
 
-  ev_idade = lv_anoatual - lv_anonasc.
+          ev_idade = ev_idade - 1 .
 
-  IF lv_mesatual EQ lv_mesnasc.
-
-    IF lv_diaatual < lv_dianasc.
-
-      ev_idade = ev_idade - 1.
+        ENDIF.
 
     ENDIF.
-
-  ELSE.
-
-    IF lv_mesatual < lv_mesnasc.
-
-      ev_idade = ev_idade - 1.
-
-    ENDIF.
-
-  ENDIF.
 
 ENDFUNCTION.
